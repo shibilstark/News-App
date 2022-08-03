@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/presentation/screens/detailed_news/detailed_news.dart';
 import 'package:news_app/presentation/screens/home/home_screen.dart';
+import 'package:news_app/presentation/screens/onboarding/onboarding.dart';
 import 'package:news_app/presentation/screens/splash/splash_screen.dart';
 
 class AppRouter {
   Route? onGenerateRoute(RouteSettings routSettings) {
     switch (routSettings.name) {
+      case "/onboarding":
+        return MaterialPageRoute(builder: (_) => OnBoardingScreen());
       case "/":
         return MaterialPageRoute(builder: (_) => SplashScreen());
       case "/home":

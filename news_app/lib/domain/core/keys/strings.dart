@@ -1,7 +1,8 @@
 class PersonalKeys {
-  static const key = "cd2203707947413b8288ef6e7431c3fd";
+  static const key = "2aa50ca3b01140268e49b80c3e1bb6ce";
   static const baseUrl = "https://newsapi.org/v2";
   static const topHeadlines = "/top-headlines?";
+  static const everything = "/everything?";
   static const eg =
       "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=cd2203707947413b8288ef6e7431c3fd";
   static const th =
@@ -28,6 +29,12 @@ class ApiCategory {
 }
 
 class ApiEndPoints {
+  final date = DateTime.now();
+
   static final topHeadline = (country) =>
       "${PersonalKeys.baseUrl}${PersonalKeys.topHeadlines}country=${country}&apiKey=${PersonalKeys.key}";
+  static final categories = ({required String cat, required String country}) =>
+      "${PersonalKeys.baseUrl}${PersonalKeys.topHeadlines}country=${country}&category=${cat}&apiKey=${PersonalKeys.key}";
+  static final everything = () =>
+      "${PersonalKeys.baseUrl}${PersonalKeys.everything}q='a'&from=${DateTime.now().toIso8601String().split("T").first}&apiKey=${PersonalKeys.key}";
 }

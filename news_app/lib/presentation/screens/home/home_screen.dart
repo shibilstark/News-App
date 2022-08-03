@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:news_app/core/colors.dart';
 import 'package:news_app/core/constants.dart';
-import 'package:news_app/domain/core/keys/strings.dart';
+
 import 'package:news_app/infrastrucutre/service/news_service.dart';
-import 'package:news_app/infrastrucutre/test/test.dart';
-import 'package:news_app/presentation/screens/top_news/top_news.dart';
-import 'package:news_app/presentation/widgets/theme_button.dart';
+import 'package:news_app/presentation/screens/home/home_drawer.dart';
+import 'package:news_app/presentation/screens/news_views/all_news/all_news.dart';
+import 'package:news_app/presentation/screens/news_views/business_news/business_news.dart';
+import 'package:news_app/presentation/screens/news_views/enetertainment/entertainment_news.dart';
+import 'package:news_app/presentation/screens/news_views/general/general_news.dart';
+import 'package:news_app/presentation/screens/news_views/health_news/health_news.dart';
+import 'package:news_app/presentation/screens/news_views/science_news/science_news.dart';
+import 'package:news_app/presentation/screens/news_views/sports_news/sports_news.dart';
+import 'package:news_app/presentation/screens/news_views/tech/teck_news.dart';
+import 'package:news_app/presentation/screens/news_views/top_news/top_news.dart';
 
 ValueNotifier<int> _tabNotifier = ValueNotifier(0);
+
+final GlobalKey<ScaffoldState> _key = GlobalKey();
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -20,6 +26,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
+      drawer: HomeDrawer(),
       appBar: PreferredSize(
         preferredSize: appbarheight,
         child: HomeAppBar(),
@@ -36,25 +44,28 @@ class HomeScreen extends StatelessWidget {
 }
 
 final _tabLabels = [
+  "All",
   "Top",
-  ApiCategory.business,
-  ApiCategory.entertainment,
-  ApiCategory.general,
-  ApiCategory.health,
-  ApiCategory.science,
-  ApiCategory.sports,
-  ApiCategory.technology,
+  "Business",
+  "Enetertainment",
+  "General",
+  "Health",
+  "Science",
+  "Sports",
+  "Technology",
 ];
 
-final _tabViews = [
+const _tabViews = [
+  AllNewsBody(),
   TopNewsBody(),
-  TestWidget(),
-  TestWidget(),
-  TestWidget(),
-  TestWidget(),
-  TestWidget(),
-  TestWidget(),
-  TestWidget(),
+  BusinessNewsBody(),
+  EntertainmentNewsBody(),
+  GeneralNewsBody(),
+  HealthNewsBody(),
+  ScienceNewsBody(),
+  SportsNewsBody(),
+  GeneralNewsBody(),
+  TechNewsBody(),
 ];
 
 class HomeAppBar extends StatelessWidget {
@@ -65,7 +76,7 @@ class HomeAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _tabs = List.generate(
-      8,
+      _tabLabels.length,
       (index) => Padding(
         padding: EdgeInsets.symmetric(
           vertical: 5.sm,
@@ -87,12 +98,21 @@ class HomeAppBar extends StatelessWidget {
       ),
     );
     return AppBar(
-      actions: [ThemModeButton()],
+      // actions: [ThemModeButton()],
+      leading: IconButton(
+          icon: Icon(
+            Icons.menu,
+            color: Theme.of(context).textTheme.bodyLarge!.color,
+          ),
+          onPressed: () {
+            _key.currentState!.openDrawer();
+          }),
       elevation: 0,
       title: Text(
         "NewsApp",
         style: Theme.of(context).textTheme.titleLarge,
       ),
+      titleSpacing: 0.sm,
       automaticallyImplyLeading: false,
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(50),
@@ -101,7 +121,7 @@ class HomeAppBar extends StatelessWidget {
             builder: (context, int val, _) {
               return DefaultTabController(
                 initialIndex: _tabNotifier.value,
-                length: 8,
+                length: _tabLabels.length,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 10.sm),
                   width: double.infinity,
